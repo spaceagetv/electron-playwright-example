@@ -10,7 +10,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "e2e": "npm run package; playwright test"
+    "pree2e": "npm run package",
+    "e2e": "playwright test"
   },
   "keywords": [
     "electron",
