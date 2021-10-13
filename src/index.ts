@@ -21,6 +21,9 @@ const createWindow = (): void => {
     y = bounds.y + 20
   }
 
+  // are we running tests?
+  const testing = process.env.CI === '1'
+
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
@@ -29,6 +32,8 @@ const createWindow = (): void => {
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       additionalArguments: [`--window-id=${count}`],
+      nodeIntegration: testing ? true : false,
+      contextIsolation: testing ? false : true,
     },
     show: false,
   })
@@ -62,4 +67,8 @@ app.on('activate', () => {
 
 ipcMain.on('new-window', () => {
   createWindow()
+})
+
+ipcMain.handle('how-many-windows', () => {
+  return count
 })

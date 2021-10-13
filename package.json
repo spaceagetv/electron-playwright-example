@@ -12,7 +12,14 @@
     "lint": "eslint --ext .ts,.tsx .",
     "e2e": "npm run package; playwright test"
   },
-  "keywords": ["electron", "playwright", "example", "electron-forge", "webpack", "typescript"],
+  "keywords": [
+    "electron",
+    "playwright",
+    "example",
+    "electron-forge",
+    "webpack",
+    "typescript"
+  ],
   "author": {
     "name": "Jeff Robbins"
   },
