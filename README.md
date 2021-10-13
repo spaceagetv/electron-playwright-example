@@ -1,6 +1,6 @@
 # electron-playwright-example
 
-Example of multi-window Playwright testing with Electron
+Example of multi-window [Playwright](https://playwright.dev) testing with [Electron](https://www.electronjs.org)
 
 ```shell
 git clone https://github.com/spaceagetv/electron-playwright-example.git
