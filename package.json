@@ -59,10 +59,10 @@
               "config": "./webpack.renderer.config.js",
               "entryPoints": [
                 {
-                  "html": "./src/index.html",
-                  "js": "./src/renderer.ts",
+                  "html": "./src/renderer/index.html",
+                  "js": "./src/renderer/index.ts",
                   "preload": {
-                    "js": "./src/preload.ts"
+                    "js": "./src/renderer/preload.ts"
                   },
                   "name": "main_window"
                 }
