@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, MenuItem } from 'electron';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -49,7 +49,33 @@ const createWindow = (): void => {
   // mainWindow.webContents.openDevTools();
 };
 
-app.on('ready', createWindow);
+function initMenu() {
+  const menu = Menu.getApplicationMenu()
+  // create the "New Window" MenuItem
+  const newWindow = new MenuItem({
+    label: 'New Window',
+    id: 'new-window',
+    accelerator: 'CmdOrCtrl+N',
+    click: () => {
+      createWindow()
+    },
+  })
+  // find the "File" MenuItem
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const filemenu = menu.items.find(item => item.role === 'filemenu')
+  if (filemenu) {
+    // add the "New Window" MenuItem to the beginning of the File menu
+    filemenu.submenu.insert(0, newWindow)
+  }
+  // update the application menu
+  Menu.setApplicationMenu(menu)
+}
+
+app.on('ready', () => {
+  initMenu()
+  createWindow()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -65,10 +91,16 @@ app.on('activate', () => {
   }
 });
 
+/**
+ * Respond to IPC request for a new window
+ */
 ipcMain.on('new-window', () => {
   createWindow()
 })
 
+/**
+ * Return the current number of windows (via IPC)
+ */
 ipcMain.handle('how-many-windows', () => {
   return count
 })

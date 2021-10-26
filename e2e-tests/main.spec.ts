@@ -1,6 +1,14 @@
+/** 
+ * Example Playwright script for Electron
+ * showing/testing various API features 
+ * in both renderer and main processes
+ */
+
 import path from 'path'
 import { ElectronApplication, Page, _electron as electron } from 'playwright'
 import { test, expect } from '@playwright/test'
+import jimp from 'jimp'
+import { clickMenuItemById } from './electron-playwright-helpers'
 
 let electronApp: ElectronApplication
 
@@ -75,4 +83,25 @@ test('receive IPC invoke/handle via renderer', async () => {
     return await ipcRenderer.invoke('how-many-windows')
   })
   expect(result).toBe(4)
+})
+
+test('select a menu item via the main process', async () => {
+  await clickMenuItemById(electronApp, 'new-window')
+  const newPage = await electronApp.waitForEvent('window')
+  expect(newPage).toBeTruthy()
+  expect(await newPage.title()).toBe('Window 5')
+  page = newPage
+})
+
+test('make sure two screenshots of the same page match', async ({page}) => {
+  // take a screenshot of the current page
+  const screenshot1: Buffer = await page.screenshot()
+  // create a visual hash using Jimp
+  const screenshot1hash = (await jimp.read(screenshot1)).hash()
+  // take a screenshot of the page
+  const screenshot2: Buffer = await page.screenshot()
+  // create a visual hash using Jimp
+  const screenshot2hash = (await jimp.read(screenshot2)).hash()
+  // compare the two hashes
+  expect(screenshot1hash).toEqual(screenshot2hash)
 })
