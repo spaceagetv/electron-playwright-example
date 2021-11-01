@@ -4,20 +4,23 @@
  * in both renderer and main processes
  */
 
-import path from 'path'
 import { ElectronApplication, Page, _electron as electron } from 'playwright'
 import { test, expect } from '@playwright/test'
 import jimp from 'jimp'
-import { clickMenuItemById } from './electron-playwright-helpers'
+import { clickMenuItemById, findLatestBuild, parseElectronApp } from './electron-playwright-helpers'
 
 let electronApp: ElectronApplication
 
 test.beforeAll(async () => {
-  const main = path.join(__dirname, '..', '.webpack', 'main', 'index.js')
+  // find the latest build in the out directory
+  const latestBuild = findLatestBuild()
+  // parse the directory and find paths and other info
+  const appInfo = parseElectronApp(latestBuild)
   // set the CI environment variable to true
   process.env.CI = '1'
   electronApp = await electron.launch({
-    args: [main],
+    args: [appInfo.main],
+    executablePath: appInfo.executable,
   })
 })
 
