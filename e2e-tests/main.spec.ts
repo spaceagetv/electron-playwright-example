@@ -21,6 +21,7 @@ test.beforeAll(async () => {
   electronApp = await electron.launch({
     args: [appInfo.main],
     executablePath: appInfo.executable,
+    recordVideo: {dir: 'out/test-results'}
   })
 })
 
