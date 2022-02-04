@@ -235,11 +235,15 @@ function getLinuxExecutableName(baseName: string): string {
 
 /**
  * Given a directory containing an Electron app build,
- * return the path to the app's executable and the path to the app's main file.
+ * or the path to the app itself, (directory on Mac, executable on Windows)
+ * return a bunch of metadata, including the path to the app's executable 
+ * and the path to the app's main file.
  */
 export function parseElectronApp(buildDir: string): ElectronAppInfo {
   console.log(`Parsing Electron app in ${buildDir}`)
   let platform: string
+
+  // in case the buildDir is the path to the app itself
   if (buildDir.endsWith('.app')) {
     buildDir = path.dirname(buildDir)
     platform = 'darwin'
