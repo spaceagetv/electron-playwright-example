@@ -380,7 +380,9 @@ export function parseElectronApp(buildDir: string): ElectronAppInfo {
     //   <appName> (executable)
     //   resources/
     //     app.asar (asar bundle) - or -
-    //     ??  (Not sure about this part yet.)
+    //     app --- (untested - we're making assumptions here)
+    //       package.json
+    //       (your app structure)
 
     executable = path.join(buildDir, getLinuxExecutableName(baseName));
     resourcesDir = path.join(buildDir, 'resources');
@@ -396,11 +398,17 @@ export function parseElectronApp(buildDir: string): ElectronAppInfo {
       )
       main = path.join(asarPath, packageJson.main)
     } else {
-      throw new Error('Haven\'t figured this part out yet.');
+      try {
+        packageJson = JSON.parse(
+          fs.readFileSync(path.join(resourcesDir, 'app', 'package.json'), 'utf8')
+        )
+        main = path.join(resourcesDir, 'app', packageJson.main)
+      } catch (err) {
+        throw new Error(`Could not find package.json in ${resourcesDir}. Apparently we don't quite know how Electron works on Linux yet. Please submit a bug report or pull request!`)
+      }
     }
     name = packageJson.name
   } else {
-    /**  @todo add support for linux */
     throw new Error(`Platform not supported: ${platform}`)
   }
   return {
