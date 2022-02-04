@@ -22,7 +22,7 @@ const createWindow = (): void => {
   }
 
   // are we running tests?
-  const testing = process.env.CI === '1'
+  const testing = process.env.CI === 'e2e'
 
   const mainWindow = new BrowserWindow({
     height: 600,
