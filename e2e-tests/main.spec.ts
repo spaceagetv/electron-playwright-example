@@ -20,8 +20,22 @@ test.beforeAll(async () => {
   process.env.CI = '1'
   electronApp = await electron.launch({
     args: [appInfo.main],
-    executablePath: appInfo.executable,
+    executablePath: appInfo.executable
   })
+  electronApp.on('window', async (page) => {
+    const filename = page.url()?.split('/').pop()
+    console.log(`Window opened: ${filename}`)
+
+    // capture errors
+    page.on('pageerror', (error) => {
+      console.error(error)
+    })
+    // capture console messages
+    page.on('console', (msg) => {
+      console.log(msg.text())
+    })
+  })
+
 })
 
 test.afterAll(async () => {
