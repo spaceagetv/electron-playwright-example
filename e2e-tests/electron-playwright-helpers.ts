@@ -222,6 +222,18 @@ export interface ElectronAppInfo {
 }
 
 /**
+ * Given baseName, extract linux executable name.
+ * Can't depend on .app, or .exe being in the name.
+ * Assume baseName format is <appName>-<platform>-<arch>
+ */
+function getLinuxExecutableName(baseName: string): string {
+
+  const tokens = baseName.split('-')
+  const result = tokens.slice(0, tokens.length - 2).join('-');
+  return result;
+}
+
+/**
  * Given a directory containing an Electron app build,
  * return the path to the app's executable and the path to the app's main file.
  */
@@ -356,6 +368,31 @@ export function parseElectronApp(buildDir: string): ElectronAppInfo {
         fs.readFileSync(path.join(resourcesDir, 'app', 'package.json'), 'utf8')
       )
       main = path.join(resourcesDir, 'app', packageJson.main)
+    }
+    name = packageJson.name
+  } else if (platform === 'linux') {
+    // Linux Structure
+    // <buildDir>/
+    //   <appName> (executable)
+    //   resources/
+    //     app.asar (asar bundle) - or -
+    //     ??  (Not sure about this part yet.)
+
+    executable = path.join(buildDir, getLinuxExecutableName(baseName));
+    resourcesDir = path.join(buildDir, 'resources');
+    const resourcesList = fs.readdirSync(resourcesDir);
+    asar = resourcesList.includes('app.asar');
+
+    let packageJson: { main: string; name: string }
+
+    if (asar) {
+      const asarPath = path.join(resourcesDir, 'app.asar')
+      packageJson = JSON.parse(
+        ASAR.extractFile(asarPath, 'package.json').toString('utf8')
+      )
+      main = path.join(asarPath, packageJson.main)
+    } else {
+      throw new Error('Haven\'t figured this part out yet.');
     }
     name = packageJson.name
   } else {
