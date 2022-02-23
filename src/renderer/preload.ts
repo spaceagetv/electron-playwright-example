@@ -11,3 +11,27 @@ document.addEventListener('DOMContentLoaded', () => {
     document.title = `Window ${id}`
   }
 })
+
+function getSyncronousData(): string {
+  return 'Synchronous Data'
+}
+
+function getAsynchronousData(): Promise<string> {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('Asynchronous Data')
+    }, 1000)
+  })
+}
+
+/**
+ * ipcRenderer listeners do not usually return a value
+ * but the e2e test will call this function to get the data
+ */
+ipcRenderer.addListener('get-sychronous-data', () => {
+  return getSyncronousData()
+})
+
+ipcRenderer.addListener('get-asynchronous-data', async () => {
+  return await getAsynchronousData()
+})

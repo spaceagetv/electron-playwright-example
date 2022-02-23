@@ -104,3 +104,23 @@ ipcMain.on('new-window', () => {
 ipcMain.handle('how-many-windows', () => {
   return count
 })
+
+function mainSychronousData() {
+  return 'Main Synchronous Data'
+}
+
+async function mainAsynchronousData() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('Main Asynchronous Data')
+    }, 1000)
+  })
+}
+
+ipcMain.on('main-sychronous-data', (event, arg) => {
+  return mainSychronousData()
+})
+
+ipcMain.on('main-asynchronous-data', async (event, arg) => {
+  return await mainAsynchronousData() 
+})
