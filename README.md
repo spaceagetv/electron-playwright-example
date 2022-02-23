@@ -9,6 +9,14 @@ npm install
 npm run e2e
 ```
 
+## electron-playwright-helpers
+
+The library of helper functions for this project have been broken out into their own package,
+which you can install in your own project and use when writing your own tests. Find the
+[electron-playwright-helpers library here](https://github.com/spaceagetv/electron-playwright-helpers).
+
+## Notes
+
 This example uses Electron Forge configured to build with Webpack. Since we're testing the .webpack code, this test does a `npm run package` to prepare the code before each `npm run e2e`.
 
 Note also that `nodeIntegration` is enabled and `contextIsolation` is disabled when the `CI` environment variable is set to "1". This allows us to maintain recommended Electron security for our distributed app, while allowing us greater access while testing.
