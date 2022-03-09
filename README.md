@@ -9,11 +9,11 @@ npm install
 npm run e2e
 ```
 
-## electron-playwright-helpers
+## 🚀 electron-playwright-helpers!!
 
-The library of helper functions for this project have been broken out into their own package,
+The library of helper functions for this project have been broken out into their own NPM package,
 which you can install in your own project and use when writing your own tests. Find the
-[electron-playwright-helpers library here](https://github.com/spaceagetv/electron-playwright-helpers).
+**electron-playwright-helpers** library [on GitHub](https://github.com/spaceagetv/electron-playwright-helpers) and [NPM](https://www.npmjs.com/package/electron-playwright-helpers).
 
 ## Notes
 
