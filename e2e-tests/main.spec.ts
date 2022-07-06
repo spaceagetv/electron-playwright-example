@@ -109,7 +109,7 @@ test('receive IPC invoke/handle via renderer', async () => {
 })
 
 test('receive synchronous data via ipcRendererCallFirstListener()', async () => {
-  const data = await ipcRendererCallFirstListener(page, 'get-sychronous-data')
+  const data = await ipcRendererCallFirstListener(page, 'get-synchronous-data')
   expect(data).toBe('Synchronous Data')
 })
 
@@ -119,7 +119,7 @@ test('receive asynchronous data via ipcRendererCallFirstListener()', async () =>
 })
 
 test('receive synchronous data via ipcMainCallFirstListener()', async () => {
-  const data = await ipcMainCallFirstListener(electronApp, 'main-sychronous-data')
+  const data = await ipcMainCallFirstListener(electronApp, 'main-synchronous-data')
   expect(data).toBe('Main Synchronous Data')
 })
 

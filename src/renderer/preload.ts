@@ -28,7 +28,7 @@ function getAsynchronousData(): Promise<string> {
  * ipcRenderer listeners do not usually return a value
  * but the e2e test will call this function to get the data
  */
-ipcRenderer.addListener('get-sychronous-data', () => {
+ipcRenderer.addListener('get-synchronous-data', () => {
   return getSyncronousData()
 })
 

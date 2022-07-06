@@ -105,7 +105,7 @@ ipcMain.handle('how-many-windows', () => {
   return count
 })
 
-function mainSychronousData() {
+function mainSynchronousData() {
   return 'Main Synchronous Data'
 }
 
@@ -117,8 +117,8 @@ async function mainAsynchronousData() {
   })
 }
 
-ipcMain.on('main-sychronous-data', (event, arg) => {
-  return mainSychronousData()
+ipcMain.on('main-synchronous-data', (event, arg) => {
+  return mainSynchronousData()
 })
 
 ipcMain.on('main-asynchronous-data', async (event, arg) => {
