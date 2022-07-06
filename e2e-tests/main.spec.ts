@@ -6,11 +6,13 @@
 
 import { expect, test } from '@playwright/test'
 import { 
-  clickMenuItemById, 
+  clickMenuItemById,
   findLatestBuild, 
   ipcMainCallFirstListener, 
   ipcRendererCallFirstListener, 
   parseElectronApp,
+  ipcMainInvokeHandler,
+  ipcRendererInvoke
 } from 'electron-playwright-helpers'
 import jimp from 'jimp'
 import { ElectronApplication, Page, _electron as electron } from 'playwright'
@@ -99,12 +101,14 @@ test('send IPC message from renderer', async () => {
 })
 
 test('receive IPC invoke/handle via renderer', async () => {
-  // evaluate this script in render process and collect the result
-  const result = await page.evaluate(async () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { ipcRenderer } = require('electron')
-    return await ipcRenderer.invoke('how-many-windows')
-  })
+  // evaluate this script in RENDERER process and collect the result
+  const result = await ipcRendererInvoke(page, 'how-many-windows')
+  expect(result).toBe(4)
+})
+
+test('receive IPC handle data via main', async () => {
+  // evaluate this script in MAIN process and collect the result
+  const result = await ipcMainInvokeHandler(electronApp, 'how-many-windows')
   expect(result).toBe(4)
 })
 
